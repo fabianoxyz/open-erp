@@ -1,41 +1,70 @@
-FROM ruby:3.3.4
 
-ENV DATABASE_URL=
-ENV REDIS_URL=
-
-RUN apt-get update
-RUN apt-get -y upgrade
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - &&\
-    apt-get install -y nodejs
-RUN npm install --global yarn@1.22
+FROM ruby:3.3.4-alpine
 
 LABEL maintainer="gilcierweb@gmail.com"
 
-WORKDIR /app
+ENV RAILS_ENV development
+ENV RAILS_SERVE_STATIC_FILES true
+ENV RAILS_LOG_TO_STDOUT true
+ENV APP_HOME /app
+ENV BUNDLE_APP_CONFIG="$APP_HOME/.bundle"
+ENV NODE_VERSION 16
 
-RUN bundle config build.nokogiri --use-system-libraries
+RUN apk add --update \
+      binutils-gold \
+      bash \
+      build-base \
+      busybox \
+      ca-certificates \
+      curl \
+      file \
+      g++ \
+      gcc \
+      git \
+      graphicsmagick \
+      less \
+      libstdc++ \
+      libffi-dev \
+      libc-dev \
+      linux-headers \
+      libxml2-dev \
+      libxslt-dev \
+      libgcrypt-dev \
+      libffi-dev \
+      libsodium-dev \
+      make \
+      netcat-openbsd \
+      nodejs \
+      openssl \
+      pkgconfig \
+      postgresql-dev \
+      tzdata \
+      openssh-client \
+      rsync \
+      yaml-dev \
+      sqlite-dev \
+      ruby-dev \
+      zlib-dev \
+      yarn
+
+RUN ruby -v && node -v && yarn -v
+RUN echo 'gem: --no-ri --no-rdoc' > ~/.gemrc
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
+
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
-
 COPY package.json yarn.lock ./
+
+RUN gem install bundler -v 2.3.12
+RUN bundle check || bundle install
 RUN yarn install --check-files
 
-COPY . ./
+# Copia nosso código para dentro do container
+COPY . $APP_HOME
 
-RUN yarn run build
+RUN rm -f tmp/pids/server.pid
 
-# Executa a criação/atualização do Banco de Dados
-ENV DEPLOY_DATABASE=false
+EXPOSE 3000
 
-# Executa os testes
-ENV PERFORM_TESTS=false
-
-# Inicia a aplicação
-ENV START_APP=true
-
-# Para Configuration Management
-# Será o valor atribuído à variável RAILS_ENV
-# Por padrão, assume o valor `development`
-ENV CONFIG=development
-
-ENTRYPOINT ["./entrypoints/app-entrypoint.sh"]
+# Roda nosso servidor
+#CMD ["bin/dev"]
