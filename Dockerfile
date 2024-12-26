@@ -3,12 +3,10 @@ FROM ruby:3.3.4-alpine
 
 LABEL maintainer="gilcierweb@gmail.com"
 
-ENV RAILS_ENV development
 ENV RAILS_SERVE_STATIC_FILES true
 ENV RAILS_LOG_TO_STDOUT true
 ENV APP_HOME /app
 ENV BUNDLE_APP_CONFIG="$APP_HOME/.bundle"
-ENV NODE_VERSION 16
 
 RUN apk add --update \
       binutils-gold \
