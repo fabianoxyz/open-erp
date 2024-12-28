@@ -50,6 +50,7 @@ RUN echo 'gem: --no-ri --no-rdoc' > ~/.gemrc
 RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 
+COPY . $APP_HOME
 COPY Gemfile Gemfile.lock ./
 COPY package.json yarn.lock ./
 
@@ -57,12 +58,9 @@ RUN gem install bundler -v 2.3.12
 RUN bundle check || bundle install
 RUN yarn install --check-files
 
-# Copia nosso código para dentro do container
-COPY . $APP_HOME
-
 RUN rm -f tmp/pids/server.pid
 
 EXPOSE 3000
 
 # Roda nosso servidor
-#CMD ["bin/dev"]
+CMD ["bin/dev"]
