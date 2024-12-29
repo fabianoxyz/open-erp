@@ -8,8 +8,8 @@ local:
 
 amazon:
   service: S3
-  access_key_id: <%= ENV['AMAZON_S2_ACCESS_KEY_ID'] %>
-  secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY_S2'] %>
+  access_key_id: <%= ENV['AMAZON_S3_ACCESS_KEY'] %>
+  secret_access_key: <%= ENV['AMAZON_S3_SECRET_KEY'] %>
   region: <%= ENV['AMAZON_BUCKET_REGION'] %>
   bucket: <%= ENV['AMAZON_BUCKET_NAME'] %>
 
