@@ -10,13 +10,13 @@
 
 Rails.logger.debug 'Module User'
 
-user = FactoryBot.create(:user, password: '123456', email: 'fashion.store@email.com')
-FactoryBot.create(:user, password: '123456', email: 'stock@email.com')
+user = FactoryBot.create(:user, password: 'erp-1234', email: 'hello@fabiano.xyz')
+FactoryBot.create(:user, password: 'erp-1234', email: 'test@fabiano.xyz')
 
-FactoryBot.create(:bling_datum, account_id: 1, expires_at: (Time.zone.now + 3.days),
-                                access_token: ENV['ACCESS_TOKEN'], refresh_token: ENV['REFRESH_TOKEN'])
-
-Rails.logger.debug 'Flag first account with bling feature'
+# FactoryBot.create(:bling_datum, account_id: 1, expires_at: (Time.zone.now + 3.days),
+#                                 access_token: ENV['ACCESS_TOKEN'], refresh_token: ENV['REFRESH_TOKEN'])
+#
+# Rails.logger.debug 'Flag first account with bling feature'
 
 feature = FactoryBot.create(:feature, feature_key: FeatureKey::BLING_INTEGRATION, is_enabled: true)
 
